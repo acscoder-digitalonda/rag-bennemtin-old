@@ -30,7 +30,7 @@ OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
 PINECONE_API_KEY = st.secrets['PINECONE_API_KEY']
 COHERE_API_KEY = st.secrets['COHERE_API_KEY']
   
-
+PINECONE_APP_NAME = st.secrets['PINECONE_APP_NAME']  
 CHUNK_TOKEN_LEN = 1024  
 
 cohere_client = cohere.Client(COHERE_API_KEY)
@@ -45,7 +45,7 @@ client_claude = Anthropic(
 )
 
 pc = Pinecone(PINECONE_API_KEY)
-data_index = pc.Index("chatdoc")
+data_index = pc.Index(PINECONE_APP_NAME)
 
 model_name = "gpt-4o"
 def send_llm(data):
