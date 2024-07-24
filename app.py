@@ -179,9 +179,10 @@ def delete_docs(doc_id,doc_nsp="default",doc_list_nsp="list"):
      # delete from index
     d1 = [x["id"] for x in l1]
     d2 = [x["id"] for x in l2]
-     
-    data_index.delete(d1, namespace=doc_nsp)
-    data_index.delete(d2, namespace=doc_list_nsp)
+    if len(d1)>0: 
+        data_index.delete(d1, namespace=doc_nsp)
+    if len(d2)>0:     
+        data_index.delete(d2, namespace=doc_list_nsp)
 
     if (doc_list_nsp == "list"):
         remove_selected_docs(doc_id)
@@ -244,6 +245,8 @@ def add_selected_docs(idx,doc_title):
     st.session_state.selected_docs[idx] = doc_title
     save_selected_docs()
 def remove_selected_docs(idx):
+    if idx in st.session_state.all_docs.keys():
+        st.session_state.all_docs.pop(idx)
     if idx in st.session_state.selected_docs.keys():
         st.session_state.selected_docs.pop(idx)
         save_selected_docs()
@@ -253,6 +256,8 @@ def add_selected_style_docs(idx,doc_title):
     save_selected_style_docs()
 
 def remove_selected_style_docs(idx):
+    if idx in st.session_state.all_style_docs.keys():
+        st.session_state.all_style_docs.pop(idx)
     if idx in st.session_state.selected_style_docs.keys():
         st.session_state.selected_style_docs.pop(idx)
         save_selected_style_docs()
@@ -309,7 +314,7 @@ if new_doc_modal.is_open():
                     with st.spinner(text="Please patient,it may take some time to process the document."):
                         all_docs[document_id] = title
                         st.session_state.selected_docs[document_id] = title
-                       
+                        st.session_state.all_docs[document_id] = title
                         save_doc_to_vecdb(document_id,chunks)
                         save_doc_to_db(document_id,title,"list")
                         st.write("Document added successfully.")
