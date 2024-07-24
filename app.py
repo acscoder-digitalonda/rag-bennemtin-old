@@ -31,7 +31,7 @@ PINECONE_API_KEY = st.secrets['PINECONE_API_KEY']
 COHERE_API_KEY = st.secrets['COHERE_API_KEY']
   
 PINECONE_APP_NAME = st.secrets['PINECONE_APP_NAME']  
-CHUNK_TOKEN_LEN = 1024  
+CHUNK_TOKEN_LEN = 512  
 
 cohere_client = cohere.Client(COHERE_API_KEY)
 def cohere_rerank(query: str,docs, top_n=6):
@@ -417,8 +417,8 @@ if your_prompt:
 
     save_prompt = {"id":str(st.session_state.chat_history["id"])+"_"+str(order),"values":your_prompt_vec,"metadata":{"chat_id":st.session_state.chat_history["id"],"order":order,"role":"user","text":your_prompt}}
 
-    data = get_from_index(your_prompt_vec,30,filter=filter)
-    data = cohere_rerank(your_prompt, data,10)
+    data = get_from_index(your_prompt_vec,40,filter=filter)
+    data = cohere_rerank(your_prompt, data,15)
     
     if api_option == "Anthropic" :
         response = send_llm_claude(data) 
